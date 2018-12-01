@@ -22,8 +22,10 @@ mapCore::~mapCore() {
 void mapCore::clear(void) {
   nodeList.clear();
   wayList.clear();
+  relationList.clear();
   nodeMap.clear();
   wayMap.clear();
+  relationMap.clear();
 }
 
 void mapCore::readFile(QString filename) {

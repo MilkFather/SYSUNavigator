@@ -7,7 +7,11 @@ QSysuEastMap::QSysuEastMap(QWidget *parent) :
     QWidget(parent)
 {
     mapcore = mapCore::getInstance();
-    // mapcore -> readFile("C:\\Users\\Kevin\\Documents\\GitHub\\SYSUNavigator\\build-SYSUNavigator-Desktop_Qt_5_11_2_MinGW_32bit-Debug\\debug\\sysu-eastcampus.osm");
+}
+
+void QSysuEastMap::loadMapFromFile(QString &pth) {
+  mapcore -> readFile(pth);
+  this->repaint();
 }
 
 void QSysuEastMap::paintEvent(QPaintEvent *event)

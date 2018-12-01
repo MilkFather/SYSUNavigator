@@ -17,6 +17,7 @@ class QSysuEastMap : public QWidget
 
 public:
     explicit QSysuEastMap(QWidget *parent = nullptr);
+  void loadMapFromFile(QString &pth);
     ~QSysuEastMap();
 
 private slots:

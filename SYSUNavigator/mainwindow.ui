@@ -54,6 +54,19 @@
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
+      <widget class="QPushButton" name="loadFileBtn">
+       <property name="geometry">
+        <rect>
+         <x>40</x>
+         <y>30</y>
+         <width>114</width>
+         <height>32</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Load Map(&amp;L)</string>
+       </property>
+      </widget>
      </widget>
     </item>
    </layout>
