@@ -43,14 +43,14 @@ void mapCore::readFile(QString filename) {
             assert(reader.attributes().hasAttribute("lon"));
             // add new node to vector
             mapNode n;
-            n.id = reader.attributes().value("id").toULong();
+            n.id = reader.attributes().value("id").toULongLong();
             n.latitude = reader.attributes().value("lat").toDouble();
             n.longitude = reader.attributes().value("lon").toDouble();
             nodeList.push_back(n);
             nodeMap[n.id] = nodeList.size() - 1;
           } else if (QString::compare(strElementName, "way") == 0) {
             assert(reader.attributes().hasAttribute("id"));
-            parseWay(reader, reader.attributes().value("id").toULong());
+            parseWay(reader, reader.attributes().value("id").toULongLong());
           } else if (QString::compare(strElementName, "bounds") == 0) {
             minlat = reader.attributes().value("minlat").toDouble();
             minlon = reader.attributes().value("minlon").toDouble();
@@ -58,7 +58,7 @@ void mapCore::readFile(QString filename) {
             maxlon = reader.attributes().value("maxlon").toDouble();
           } else if (QString::compare(strElementName, "relation") == 0) {
             assert(reader.attributes().hasAttribute("id"));
-            parseRelation(reader, reader.attributes().value("id").toULong());
+            parseRelation(reader, reader.attributes().value("id").toULongLong());
           }
           }
           break;
@@ -76,7 +76,7 @@ void mapCore::readFile(QString filename) {
   }
 }
 
-void mapCore::parseWay(QXmlStreamReader &reader, unsigned long id) {
+void mapCore::parseWay(QXmlStreamReader &reader, unsigned long long id) {
   mapWay w;
   w.id = id;
   while (!reader.atEnd()) {
@@ -84,7 +84,7 @@ void mapCore::parseWay(QXmlStreamReader &reader, unsigned long id) {
     if (reader.isStartElement()) {  // 开始元素
       if (QString::compare(reader.name().toString(), "nd") == 0) {
         // add node to
-        unsigned long i = reader.attributes().value("ref").toULong();
+        unsigned long long i = reader.attributes().value("ref").toULongLong();
         w.nodes.push_back(i);
       } else if (QString::compare(reader.name().toString(), "tag") == 0) {
         w.tags[reader.attributes().value("k").toString()] = reader.attributes().value("v").toString();
@@ -100,7 +100,7 @@ void mapCore::parseWay(QXmlStreamReader &reader, unsigned long id) {
   }
 }
 
-void mapCore::parseRelation(QXmlStreamReader &reader, unsigned long id) {
+void mapCore::parseRelation(QXmlStreamReader &reader, unsigned long long id) {
   mapRelation r;
   r.id = id;
   while (!reader.atEnd()) {
@@ -110,14 +110,14 @@ void mapCore::parseRelation(QXmlStreamReader &reader, unsigned long id) {
         // is this a node?
         if (QString::compare(reader.attributes().value("type").toString(), "node") == 0) {
           // this is a node
-          unsigned long i = reader.attributes().value("ref").toULong();
+          unsigned long long i = reader.attributes().value("ref").toULongLong();
           r.nodes.push_back(i);
         } else if (QString::compare(reader.attributes().value("type").toString(), "way") == 0) {
           if (QString::compare(reader.attributes().value("role").toString(), "outer") == 0) {
-            unsigned long i = reader.attributes().value("ref").toULong();
+            unsigned long long i = reader.attributes().value("ref").toULongLong();
             r.ways_outer.push_back(i);
           } else if (QString::compare(reader.attributes().value("role").toString(), "inner") == 0) {
-            unsigned long i = reader.attributes().value("ref").toULong();
+            unsigned long long i = reader.attributes().value("ref").toULongLong();
             r.ways_inner.push_back(i);
           }
         }

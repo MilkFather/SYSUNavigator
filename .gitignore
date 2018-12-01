@@ -1,4 +1,5 @@
 **/.DS_Store
 **/bin/*
 **/build/*
-**/build-SYSUNavigator-Desktop_Qt_5_11_2_clang_64bit-Debug/
+**/build-SYSUNavigator-Desktop_Qt_5_11_2_clang_64bit-Debug/*
+**/build-SYSUNavigator-Desktop_Qt_5_11_2_MinGW_32bit-Debug/*

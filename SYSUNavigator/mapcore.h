@@ -12,22 +12,22 @@ using namespace std;
 
 // node struct
 struct mapNode {
-  unsigned long id;
+  unsigned long long id;
   double latitude, longitude;
   map<QString, QString> tags;
 };
 
 struct mapWay {
-  unsigned long id;
-  vector<unsigned long> nodes;
+  unsigned long long id;
+  vector<unsigned long long> nodes;
   map<QString, QString> tags;
 };
 
 struct mapRelation {
-  unsigned long id;
-  vector<unsigned long> nodes;
-  vector<unsigned long> ways_outer;
-  vector<unsigned long> ways_inner;
+  unsigned long long id;
+  vector<unsigned long long> nodes;
+  vector<unsigned long long> ways_outer;
+  vector<unsigned long long> ways_inner;
   map<QString, QString> tags;
 };
 
@@ -38,9 +38,9 @@ public:
   vector<mapNode> nodeList;
   vector<mapWay> wayList;
   vector<mapRelation> relationList;
-  map<unsigned long, unsigned long> nodeMap;
-  map<unsigned long, unsigned long> wayMap;
-  map<unsigned long, unsigned long> relationMap;
+  map<unsigned long long, unsigned long long> nodeMap;
+  map<unsigned long long, unsigned long long> wayMap;
+  map<unsigned long long, unsigned long long> relationMap;
 
   ~mapCore();
   static shared_ptr<mapCore> getInstance(void);
@@ -56,9 +56,9 @@ private:
   mapCore(mapCore &) = delete;
   mapCore& operator=(const mapCore &) = delete;
 
-  void parseNode(QXmlStreamReader &, unsigned long) {};
-  void parseWay(QXmlStreamReader &, unsigned long);
-  void parseRelation(QXmlStreamReader &, unsigned long);
+  void parseNode(QXmlStreamReader &, unsigned long long) {};
+  void parseWay(QXmlStreamReader &, unsigned long long);
+  void parseRelation(QXmlStreamReader &, unsigned long long);
 };
 
 #endif // MAPCORE_H

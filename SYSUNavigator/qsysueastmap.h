@@ -26,7 +26,7 @@ private:
     Ui::QSysuEastMap *ui;
     shared_ptr<mapCore> mapcore;
 
-    QPainterPath getPolygon(vector<unsigned long> nodes);
+    QPainterPath getPolygon(vector<unsigned long long> nodes);
 
     void drawBuilding(unsigned long idx);
     void drawRoad(unsigned long idx);

@@ -7,7 +7,7 @@ QSysuEastMap::QSysuEastMap(QWidget *parent) :
     QWidget(parent)
 {
     mapcore = mapCore::getInstance();
-    mapcore -> readFile("sysu-eastcampus.osm");
+    // mapcore -> readFile("C:\\Users\\Kevin\\Documents\\GitHub\\SYSUNavigator\\build-SYSUNavigator-Desktop_Qt_5_11_2_MinGW_32bit-Debug\\debug\\sysu-eastcampus.osm");
 }
 
 void QSysuEastMap::paintEvent(QPaintEvent *event)
@@ -49,7 +49,7 @@ void QSysuEastMap::paintEvent(QPaintEvent *event)
   }
 }
 
-QPainterPath QSysuEastMap::getPolygon(vector<unsigned long> nodes) {
+QPainterPath QSysuEastMap::getPolygon(vector<unsigned long long> nodes) {
   QPainterPath pth;
   mapNode node1 = mapcore->nodeList[mapcore->nodeMap[nodes[0]]];
   double x1 = width() * mapcore->normalizedLon(node1.longitude);
@@ -162,7 +162,7 @@ void QSysuEastMap::drawRoad(unsigned long idx) {
   }
 
   painter.setPen(pen);
-  vector<unsigned long> ns = mapcore->wayList[idx].nodes;
+  vector<unsigned long long> ns = mapcore->wayList[idx].nodes;
   for (size_t j = 0; j < ns.size() - 1; j++) {
     if (mapcore->nodeMap.count(ns[j]) && mapcore->nodeMap.count(ns[j + 1])) {
       mapNode node1 = mapcore->nodeList[mapcore->nodeMap[ns[j]]];
