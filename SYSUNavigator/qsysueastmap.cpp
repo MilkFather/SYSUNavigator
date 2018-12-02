@@ -51,6 +51,25 @@ void QSysuEastMap::paintEvent(QPaintEvent *event)
       drawRoad(i);
     }
   }
+
+  if (highlight.size() > 0) {
+    QPainter painter(this);
+    QPen pen;
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    pen.setCapStyle(Qt::PenCapStyle::RoundCap);
+    pen.setColor(QColor(0, 0, 180));
+    pen.setWidth(6);
+    for (size_t i = 0; i < highlight.size() - 1; i++) {
+      mapNode node1 = mapcore->nodeList[mapcore->nodeMap[highlight[i]]];
+      mapNode node2 = mapcore->nodeList[mapcore->nodeMap[highlight[i + 1]]];
+      double x1 = width() * mapcore->normalizedLon(node1.longitude);
+      double y1 = height() - height() * mapcore->normalizedLat(node1.latitude);
+      double x2 = width() * mapcore->normalizedLon(node2.longitude);
+      double y2 = height() - height() * mapcore->normalizedLat(node2.latitude);
+      painter.drawLine(QPointF(x1, y1), QPointF(x2, y2));
+    }
+    //highlight.clear();
+  }
 }
 
 QPainterPath QSysuEastMap::getPolygon(vector<unsigned long long> nodes) {
@@ -72,7 +91,7 @@ QPainterPath QSysuEastMap::getPolygon(vector<unsigned long long> nodes) {
   return pth;
 }
 
-void QSysuEastMap::drawBuilding(unsigned long idx) {
+void QSysuEastMap::drawBuilding(unsigned long long idx) {
   QPainter painter(this);
   QBrush brush;
   painter.setRenderHint(QPainter::Antialiasing, true);
@@ -119,7 +138,7 @@ void QSysuEastMap::drawBuilding(unsigned long idx) {
   painter.fillPath(getPolygon(mapcore->wayList[idx].nodes), brush);
 }
 
-void QSysuEastMap::drawRoad(unsigned long idx) {
+void QSysuEastMap::drawRoad(unsigned long long idx) {
   QPainter painter(this);
   QPen pen;
   painter.setRenderHint(QPainter::Antialiasing, true);
@@ -181,13 +200,15 @@ void QSysuEastMap::drawRoad(unsigned long idx) {
   }
 }
 
-void QSysuEastMap::drawRelation(unsigned long idx) {
+void QSysuEastMap::drawRelation(unsigned long long idx) {
   QPainter painter(this);
   QBrush brush;
   painter.setRenderHint(QPainter::Antialiasing, true);
 
   if (mapcore->relationList[idx].tags.count("waterway") > 0) {
-    // no rendering currently
+    // water
+    //brush.setStyle(Qt::BrushStyle::SolidPattern);
+    //brush.setColor(QColor(180, 208, 208));
   } else if (mapcore->relationList[idx].tags.count("leisure") > 0) {
     brush.setStyle(Qt::BrushStyle::SolidPattern);
     QString tp = mapcore->relationList[idx].tags["leisure"];
@@ -221,6 +242,12 @@ void QSysuEastMap::drawRelation(unsigned long idx) {
     polygon = polygon.subtracted(poly);
   }
   painter.fillPath(polygon, brush);
+}
+
+void QSysuEastMap::drawPath(vector<unsigned long long> nodes, unsigned long long dest) {
+  highlight = nodes;
+  highlight.push_back(dest);
+  repaint();
 }
 
 QSysuEastMap::~QSysuEastMap()

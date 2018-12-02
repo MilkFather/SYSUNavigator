@@ -1,6 +1,8 @@
 #include "mapcore.h"
 #include <QFile>
 #include <QDebug>
+#include <cmath>
+#include <queue>
 
 shared_ptr<mapCore> mapCore::m_instance = shared_ptr<mapCore>(nullptr);
 
@@ -19,6 +21,19 @@ mapCore::~mapCore() {
 
 }
 
+double mapCore::getDis(double lon1, double lat1, double lon2, double lat2) {
+  const int R = 6371; // Radius of the earth in km
+  double dLat = (lat2 - lat1) * (M_PI / 180);  // deg2rad below
+  double dLon = (lon2 - lon1) * (M_PI / 180);
+  double a =
+      sin(dLat / 2) * sin(dLat / 2) +
+      cos(lat1 * (M_PI / 180)) * cos(lat2 * (M_PI / 180)) *
+      sin(dLon/2) * sin(dLon/2);
+  double c = 2 * atan2(sqrt(a), sqrt(1 - a));
+  double d = R * c; // Distance in km
+  return d;
+}
+
 void mapCore::clear(void) {
   nodeList.clear();
   wayList.clear();
@@ -26,6 +41,7 @@ void mapCore::clear(void) {
   nodeMap.clear();
   wayMap.clear();
   relationMap.clear();
+  linkedNodes.clear();
 }
 
 void mapCore::readFile(QString filename) {
@@ -49,6 +65,11 @@ void mapCore::readFile(QString filename) {
             n.latitude = reader.attributes().value("lat").toDouble();
             n.longitude = reader.attributes().value("lon").toDouble();
             nodeList.push_back(n);
+            // add linked node
+            vector<pair<unsigned long long, double> > v;
+            v.push_back(make_pair(n.id, 0));
+            linkedNodes.push_back(v);
+
             nodeMap[n.id] = nodeList.size() - 1;
           } else if (QString::compare(strElementName, "way") == 0) {
             assert(reader.attributes().hasAttribute("id"));
@@ -69,11 +90,11 @@ void mapCore::readFile(QString filename) {
           break;
       }
       if (reader.hasError()) {  // 解析出错
-        qDebug() << QString::fromLocal8Bit("错误信息：%1  行号：%2  列号：%3  字符位移：%4").arg(reader.errorString()).arg(reader.lineNumber()).arg(reader.columnNumber()).arg(reader.characterOffset());
+        //qDebug() << QString::fromLocal8Bit("错误信息：%1  行号：%2  列号：%3  字符位移：%4").arg(reader.errorString()).arg(reader.lineNumber()).arg(reader.columnNumber()).arg(reader.characterOffset());
       }
     }
-    qDebug() << QString("读取了%1个节点和%2个路径").arg(nodeList.size()).arg(wayList.size());
-    qDebug() << QString("nodeMap: %1, wayMap: %2").arg(nodeMap.size()).arg(wayMap.size());
+    //qDebug() << QString("读取了%1个节点和%2个路径").arg(nodeList.size()).arg(wayList.size());
+    //qDebug() << QString("nodeMap: %1, wayMap: %2").arg(nodeMap.size()).arg(wayMap.size());
     f.close();  // 关闭文件
   }
 }
@@ -95,6 +116,13 @@ void mapCore::parseWay(QXmlStreamReader &reader, unsigned long long id) {
       QString strElementName = reader.name().toString();
       if (QString::compare(strElementName, "way") == 0) {
         wayList.push_back(w);
+        // add linked nodes
+        for (size_t i = 0; i < w.nodes.size() - 1; i++) {
+          double lon1 = nodeList[nodeMap[w.nodes[i]]].longitude; double lat1 = nodeList[nodeMap[w.nodes[i]]].latitude;
+          double lon2 = nodeList[nodeMap[w.nodes[i + 1]]].longitude; double lat2 = nodeList[nodeMap[w.nodes[i + 1]]].latitude;
+          linkedNodes[nodeMap[w.nodes[i]]].push_back(make_pair(w.nodes[i + 1], getDis(lon1, lat1, lon2, lat2)));
+          linkedNodes[nodeMap[w.nodes[i + 1]]].push_back(make_pair(w.nodes[i], getDis(lon1, lat1, lon2, lat2)));
+        }
         wayMap[w.id] = wayList.size() - 1;
         break;  // 跳出循环（解析 QXmlStreamReader::EndDocument）
       }
@@ -135,4 +163,43 @@ void mapCore::parseRelation(QXmlStreamReader &reader, unsigned long long id) {
       }
     }
   }
+}
+
+pair<double, vector<unsigned long long> > mapCore::spfa(unsigned long long s, unsigned long long e) {
+  assert(nodeMap.count(s) + nodeMap.count(e) == 2);
+  vector<bool> inQueue(linkedNodes.size());
+  queue<unsigned long long> updateQueue;
+  vector<double> minDis(linkedNodes.size(), 1e9);
+  vector<vector<unsigned long long> > hist(linkedNodes.size());
+
+  // initialization
+  inQueue[nodeMap[s]] = true;
+  updateQueue.push(s);
+  minDis[nodeMap[s]] = 0;
+
+  while (!updateQueue.empty()) {
+    unsigned long long n = updateQueue.front();
+    updateQueue.pop();
+    inQueue[nodeMap[n]] = false;
+
+    for (size_t i = 1; i < linkedNodes[nodeMap[n]].size(); i++) {
+      unsigned long long target = linkedNodes[nodeMap[n]][i].first;
+
+      if (minDis[nodeMap[n]] + linkedNodes[nodeMap[n]][i].second < minDis[nodeMap[target]]) {
+        vector<unsigned long long> newhis = hist[nodeMap[n]];
+        newhis.push_back(n);
+        hist[nodeMap[target]] = newhis;
+        minDis[nodeMap[target]] = minDis[nodeMap[n]] + linkedNodes[nodeMap[n]][i].second;
+        if (!inQueue[nodeMap[target]]) {
+          updateQueue.push(target);
+          inQueue[nodeMap[target]] = true;
+        }
+      }
+    }
+  }
+
+  if (minDis[nodeMap[e]] == 1e9)
+    return make_pair(-1, hist[nodeMap[e]]);
+  else
+    return make_pair(minDis[nodeMap[e]], hist[nodeMap[e]]);
 }

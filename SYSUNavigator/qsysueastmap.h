@@ -20,6 +20,8 @@ public:
   void loadMapFromFile(QString &pth);
     ~QSysuEastMap();
 
+  void drawPath(vector<unsigned long long> nodes, unsigned long long dest);
+
 private slots:
   void paintEvent(QPaintEvent *event);
 
@@ -27,11 +29,13 @@ private:
     Ui::QSysuEastMap *ui;
     shared_ptr<mapCore> mapcore;
 
+    vector<unsigned long long> highlight;
+
     QPainterPath getPolygon(vector<unsigned long long> nodes);
 
-    void drawBuilding(unsigned long idx);
-    void drawRoad(unsigned long idx);
-    void drawRelation(unsigned long idx);
+    void drawBuilding(unsigned long long idx);
+    void drawRoad(unsigned long long idx);
+    void drawRelation(unsigned long long idx);
 };
 
 #endif // QSYSUEASTMAP_H

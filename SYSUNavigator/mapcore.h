@@ -49,8 +49,12 @@ public:
   double normalizedLat(double lat) {return (lat - minlat) / (maxlat - minlat);}
   double normalizedLon(double lon) {return (lon - minlon) / (maxlon - minlon);}
 
+  static double getDis(double lon1, double lat1, double lon2, double lat2);
+  pair<double, vector<unsigned long long> > spfa(unsigned long long s, unsigned long long e);
+
 private:
   static shared_ptr<mapCore> m_instance;
+  vector<vector<pair<unsigned long long, double> > > linkedNodes;
 
   mapCore();
   mapCore(mapCore &) = delete;

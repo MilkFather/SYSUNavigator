@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>976</width>
+    <width>936</width>
     <height>1011</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>SYSUNavigator</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QHBoxLayout" name="horizontalLayout" stretch="756,120">
+   <layout class="QHBoxLayout" name="horizontalLayout" stretch="756,180">
     <property name="spacing">
      <number>0</number>
     </property>
@@ -70,7 +70,14 @@
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="comboBox"/>
+        <widget class="QComboBox" name="fromComboBox">
+         <property name="currentText">
+          <string/>
+         </property>
+         <property name="currentIndex">
+          <number>-1</number>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QLabel" name="label_2">
@@ -80,12 +87,25 @@
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="comboBox_2"/>
+        <widget class="QComboBox" name="toComboBox"/>
        </item>
        <item>
         <widget class="QPushButton" name="getPathBtn">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>Route(&amp;R)</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="distanceLabel">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
          </property>
         </widget>
        </item>
@@ -112,8 +132,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>976</width>
-     <height>21</height>
+     <width>936</width>
+     <height>22</height>
     </rect>
    </property>
   </widget>

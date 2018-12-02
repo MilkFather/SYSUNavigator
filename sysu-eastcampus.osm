@@ -4266,6 +4266,7 @@
  <node id="6101629890" visible="true" version="1" changeset="64994724" timestamp="2018-11-29T03:23:04Z" user="jipeng_" uid="9163314" lat="23.0602077" lon="113.3862467">
   <tag k="barrier" v="yes"/>
  </node>
+ <node id="100" visible="true" version="2" changeset="25942049" timestamp="2014-10-08T15:48:52Z" user="fdulezi" uid="2214848" lat="23.0615362" lon="113.3876229"/>
  <way id="58801373" visible="true" version="10" changeset="62275514" timestamp="2018-09-04T11:36:14Z" user="羊角忠实黑" uid="3614011">
   <nd ref="4592847159"/>
   <nd ref="2538632495"/>
@@ -4920,7 +4921,7 @@
  <way id="256117489" visible="true" version="2" changeset="25942049" timestamp="2014-10-08T15:48:49Z" user="fdulezi" uid="2214848">
   <nd ref="3118559989"/>
   <nd ref="3118559992"/>
-  <nd ref="2618133137"/>
+  <nd ref="100"/>
   <tag k="access" v="permissive"/>
   <tag k="highway" v="service"/>
  </way>
@@ -10650,6 +10651,16 @@
  <way id="2">
   <nd ref="5230051115" />
   <nd ref="728704204" />
+  <tag k="highway" v="footway" />
+ </way>
+ <way id="3">
+  <nd ref="3118561038" />
+  <nd ref="2538717954" />
+  <tag k="highway" v="footway" />
+ </way>
+ <way id="4">
+  <nd ref="3116598042" />
+  <nd ref="5269705690" />
   <tag k="highway" v="footway" />
  </way>
  <relation id="254018" visible="true" version="31" changeset="60506815" timestamp="2018-07-08T11:12:26Z" user="j694936" uid="8391680">
