@@ -59,6 +59,7 @@ void QSysuEastMap::paintEvent(QPaintEvent *event)
     pen.setCapStyle(Qt::PenCapStyle::RoundCap);
     pen.setColor(QColor(0, 0, 180));
     pen.setWidth(6);
+    painter.setPen(pen);
     for (size_t i = 0; i < highlight.size() - 1; i++) {
       mapNode node1 = mapcore->nodeList[mapcore->nodeMap[highlight[i]]];
       mapNode node2 = mapcore->nodeList[mapcore->nodeMap[highlight[i + 1]]];
