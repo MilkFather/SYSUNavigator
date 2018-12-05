@@ -29,6 +29,8 @@ private slots:
 
   void on_toComboBox_currentIndexChanged(int index);
 
+  void on_detailsButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     shared_ptr<mapCore> mapcore;
