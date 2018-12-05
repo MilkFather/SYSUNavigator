@@ -90,6 +90,13 @@
         <widget class="QComboBox" name="toComboBox"/>
        </item>
        <item>
+        <widget class="QPushButton" name="detailsButton">
+         <property name="text">
+          <string>Info(&amp;I)</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="getPathBtn">
          <property name="enabled">
           <bool>false</bool>
@@ -133,7 +140,7 @@
      <x>0</x>
      <y>0</y>
      <width>936</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>

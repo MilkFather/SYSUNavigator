@@ -4,6 +4,13 @@
 #include <QDebug>
 #include <vector>
 #include <QFileDialog>
+#include <QMessageBox>
+
+const QString des[] = {"", "软工的男生住在这里", "计院的女生住在这里", "计科保密信计的男生住在这里", "学生活动中心，面试常用地点",
+                       "食堂，听说饭菜争议很大", "功能性场所，快递在这里", "没进去过几次的体育馆", "基本上被施工废了", "没用树荫，军训直接暴晒",
+                       "虽然工学院已经被解散了，但是这个小广场是举办露天活动的绝佳去处", "所有的实验课都在这里上", "“屠猪馆”，大佬的好去处",
+                       "日常上课都在这里", "行政办公中心", "标志性建筑，孙中山的塑像", "标志性建筑，是受到保护的文物", "学院楼，学院的学工在这里解决",
+                       "在内环。拜围墙所赐现在得绕很大一圈"};
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -94,4 +101,11 @@ void MainWindow::on_fromComboBox_currentIndexChanged(int index)
 void MainWindow::on_toComboBox_currentIndexChanged(int index)
 {
     ui->getPathBtn->setEnabled((index > 0) && (ui->fromComboBox->currentIndex() > 0) && hasFile);
+}
+
+void MainWindow::on_detailsButton_clicked()
+{
+    QMessageBox msgBox;
+    msgBox.setText(des[ui->toComboBox->currentIndex()]);
+    msgBox.exec();
 }
